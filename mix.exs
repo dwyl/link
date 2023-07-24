@@ -59,10 +59,10 @@ defmodule Link.MixProject do
   defp package() do
     [
       files: ~w(lib LICENSE mix.exs README.md),
-      name: "useful",
+      name: "link",
       licenses: ["GPL-2.0-or-later"],
       maintainers: ["dwyl"],
-      links: %{"GitHub" => "https://github.com/dwyl/useful"}
+      links: %{"GitHub" => "https://github.com/dwyl/link"}
     ]
   end
 end
