@@ -11,9 +11,9 @@ defmodule Link do
       iex> Link.compact("https://github.com/dwyl/mvp/issues/141")
       "dwyl/mvp#141"
 
-      # Can't understand the URL, just return it unmodified:
+      # Can't understand the URL, just return it sans protocol:
       iex> Link.compact("https://git.io/top")
-      "https://git.io/top"
+      "git.io/top"
 
   """
   def compact(url) do
@@ -22,7 +22,7 @@ defmodule Link do
         compact_github_url(url)
 
       true ->
-        url
+        remove_protocol(url)
     end
   end
 
@@ -48,7 +48,7 @@ defmodule Link do
     # Remove any hash (#) URL params, remove "https://" and "github.com/"
     clean = String.split(url, "#")
       |> List.first()
-      |> String.replace("https://", "")
+      |> remove_protocol()
       |> String.replace("github.com/", "")
 
     # Match issue
@@ -66,5 +66,11 @@ defmodule Link do
       # Orgs, People or Repos just return the path e.g: "dwyl/app" or "iteles"
       clean
     end
+  end
+
+  def remove_protocol(url) do
+    url
+    |> String.replace("https://", "")
+    |> String.replace("http://", "")
   end
 end

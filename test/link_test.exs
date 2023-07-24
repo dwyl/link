@@ -8,7 +8,7 @@ defmodule LinkTest do
 
   test "Link.compact/1 returns unrecognized url unmodified" do
     url = "https://git.io/top"
-    assert Link.compact(url) == url
+    assert Link.compact(url) == "git.io/top"
   end
 
   test "Link.compact_github_url/1 distils a repo deep link down to the minimum" do

@@ -44,22 +44,23 @@ please open an
 
 # How?
 
+Use this package in your `Elixir` / `Phoenix` App!
+
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `link` to your list of dependencies in `mix.exs`:
+Add `link` to your list of dependencies 
+in your `mix.exs` file:
 
 ```elixir
 def deps do
   [
-    {:link, "~> 0.1.0"}
+    {:link, "~> 1.0.0"}
   ]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/link>.
+Docs can be found at 
+[hexdocs.pm/link](https://hexdocs.pm/link)
 
 
 ## Usage Examples 🔗 
@@ -79,3 +80,10 @@ Link.compact("https://github.com/dwyl/mvp/issues/141#issuecomment-1636209664")
 Link.shorten(conn, "https://github.com/dwyl/mvp/issues/141")
 > "dwy.is/mvp-141
 ```
+
+# Need _More_? 🙌
+
+If you need a _specific_ function,
+please 
+[open an issue](https://github.com/dwyl/link/issues)
+to discuss. 
