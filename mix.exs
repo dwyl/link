@@ -5,7 +5,7 @@ defmodule Link.MixProject do
     [
       app: :link,
       description: "Link parsing, compacting and shortening functions to keep URLs brief.",
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
