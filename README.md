@@ -1,6 +1,18 @@
+<div align="center">
+
 # `link`
 
 🔗 Parse, shorten and format links. 
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dwyl/link/ci.yml?label=build&style=flat-square&branch=main)
+[![codecov.io](https://img.shields.io/codecov/c/github/dwyl/gogs/main.svg?style=flat-square)](http://codecov.io/github/dwyl/auth?branch=main)
+[![Hex.pm](https://img.shields.io/hexpm/v/link?color=brightgreen&style=flat-square)](https://hex.pm/packages/link)
+[![Libraries.io dependency status](https://img.shields.io/librariesio/release/hex/link?logoColor=brightgreen&style=flat-square)](https://libraries.io/hex/link)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/dwyl/link/issues)
+[![HitCount](http://hits.dwyl.com/dwyl/link.svg)](http://hits.dwyl.com/dwyl/link)
+
+
+</div>
 
 # Why? 🤷‍♀️
 
@@ -36,7 +48,7 @@ the `people` using the `@dwyl App`. <br />
 We don't expect this to be used by anyone `else`
 because it's _probably_ too specific to our use case.
 But if you need to parse links (`URLs`) in your project
-it _might_ be useful ...
+it _might_ be link ...
 If you need a _specific_ feature,
 please open an 
 [issue](https://github.com/dwyl/link/issues)
