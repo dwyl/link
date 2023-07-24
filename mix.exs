@@ -44,7 +44,7 @@ defmodule Link.MixProject do
         {:excoveralls, "~> 0.16.0", only: [:test, :dev]},
 
         # Create Documentation Hex.docs: https://hex.pm/packages/ex_doc
-        {:ex_doc, "~> 0.29.0", only: :dev},
+        {:ex_doc, "~> 0.30.3", only: :dev},
 
         # Git pre-commit hook: https://github.com/dwyl/elixir-pre-commit
         {:pre_commit, "~> 0.3.4", only: :dev},
