@@ -77,7 +77,7 @@ in your `mix.exs` file:
 ```elixir
 def deps do
   [
-    {:link, "~> 1.0.1"}
+    {:link, "~> 1.0.2"}
   ]
 end
 ```
