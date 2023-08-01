@@ -11,6 +11,14 @@ defmodule LinkTest do
     assert Link.compact(url) == "git.io/top"
   end
 
+  test "Link.strip_protocol/1 returns url without https:// or http://" do
+    url = "https://git.io/top"
+    assert Link.strip_protocol(url) == "git.io/top"
+
+    url2 = "http://google.com"
+    assert Link.strip_protocol(url2) == "google.com"
+  end
+
   test "Link.compact_github_url/1 distils a repo deep link down to the minimum" do
     url = "https://github.com/dwyl/app#what"
     assert Link.compact(url) == "dwyl/app"
