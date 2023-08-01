@@ -4,7 +4,8 @@ defmodule Link do
   """
 
   @doc """
-  `compact/1` reduces a url
+  `compact/1` reduces a url to its most compact form.
+  This is highly specific to our use case.
 
   ## Examples
 
@@ -15,6 +16,9 @@ defmodule Link do
       iex> Link.compact("https://git.io/top")
       "git.io/top"
 
+      iex> Link.compact("https://mvp.fly.dev/")
+      "mvp.fly.dev"
+
   """
   def compact(url) do
     # This uses cond instead of "if" because it will expand soon!
@@ -23,7 +27,9 @@ defmodule Link do
         compact_github_url(url)
 
       true ->
-        strip_protocol(url)
+        url
+        |> strip_protocol()
+        |> strip_trailing_slash()
     end
   end
 
@@ -34,16 +40,14 @@ defmodule Link do
 
   ## Examples
 
-      iex> Link.compact_github_url("https://github.com/dwyl/mvp/issues/141")
-      "dwyl/mvp#141"
+    iex> Link.compact_github_url("https://github.com/dwyl/mvp/issues/141")
+    "dwyl/mvp#141"
 
-      iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
-      "dwyl/app#275"
+    iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
+    "dwyl/app#275"
 
-      iex> Link.compact_github_url("https://github.com/dwyl/link#123")
-      "dwyl/link"
-
-
+    iex> Link.compact_github_url("https://github.com/dwyl/link#123")
+    "dwyl/link"
   """
   def compact_github_url(url) do
     # Remove any hash (#) URL params, remove "https://" and "github.com/"
@@ -74,12 +78,30 @@ defmodule Link do
 
   ## Examples
 
-      iex> Link.strip_protocol("https://dwyl.com")
-      "dwyl.com"
+    iex> Link.strip_protocol("https://dwyl.com")
+    "dwyl.com"
   """
   def strip_protocol(url) do
     String.replace(url, ~r"(http(s)?):\/\/", "")
   end
+
+  @doc """
+  `strip_trailing_slash/1` strips trailing forward slash from URL.
+
+  ## Examples
+
+    iex> Link.strip_trailing_slash("dwyl.com/")
+    "dwyl.com"
+  """
+  def strip_trailing_slash(url) do
+    if String.ends_with?(url, "/") && url != "/" do
+      String.slice(url, 0..-2)
+    else
+      url
+    end
+  end
+
+
 
   @doc """
   `regex/0` returns the Regular Expression needed to match URLs.
@@ -137,5 +159,29 @@ defmodule Link do
   def find(text) do
     Regex.scan(regex(), text)
     |> Enum.map(&hd/1)
+  end
+
+  @doc """
+  `find_replace_compact/1` finds all instances of a URL in a block of text
+  and replaces them with the `compact/1` version.
+
+  ## Examples
+
+    iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
+    iex> Link.find_replace_compact(md)
+    "# Hello World! ![dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and ![mvp.fly.dev](https://mvp.fly.dev/)"
+  """
+  def find_replace_compact(text) do
+    map = find(text)
+    |> Enum.chunk_every(1)
+    |> Enum.map(fn [i] -> {i, compact(i)} end)
+    |> Map.new
+
+    map
+    |> Map.keys()
+    |> Enum.reduce(text, fn link, str ->
+      md_link = "![#{map[link]}](#{link})"
+      String.replace(str, link, md_link)
+    end)
   end
 end

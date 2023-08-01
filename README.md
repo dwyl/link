@@ -65,11 +65,11 @@ please open an
 
 <br />
 
-# How?
+# How? 👩‍💻
 
 Use this package in your `Elixir` / `Phoenix` App!
 
-## Installation
+## Installation ⬇️
 
 Add `link` to your list of dependencies 
 in your `mix.exs` file:
@@ -82,8 +82,8 @@ def deps do
 end
 ```
 
-Docs can be found at 
-[hexdocs.pm/link](https://hexdocs.pm/link)
+Complete Docs:
+[hexdocs.pm/link](https://hexdocs.pm/link/Link.html#content)
 
 
 ## Usage Examples 🔗 
@@ -115,7 +115,6 @@ Link.valid?("https://example.com")
 ```
 
 
-
 # Contributing 🙏
 
 The easiest way to contribute 
@@ -131,7 +130,7 @@ please
 [open an issue](https://github.com/dwyl/link/issues)
 to discuss. 
 
-# Research
+# Research 🔍
 
 If you're curious about URL RegEx, read: 
 [mathiasbynens.be/demo/url-regex](https://mathiasbynens.be/demo/url-regex)
