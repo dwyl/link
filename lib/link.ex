@@ -17,12 +17,13 @@ defmodule Link do
 
   """
   def compact(url) do
+    # This uses cond instead of "if" because it will expand soon!
     cond do
       String.contains?(url, "github") ->
         compact_github_url(url)
 
       true ->
-        remove_protocol(url)
+        strip_protocol(url)
     end
   end
 
@@ -46,9 +47,10 @@ defmodule Link do
   """
   def compact_github_url(url) do
     # Remove any hash (#) URL params, remove "https://" and "github.com/"
-    clean = String.split(url, "#")
+    clean =
+      String.split(url, "#")
       |> List.first()
-      |> remove_protocol()
+      |> strip_protocol()
       |> String.replace("github.com/", "")
 
     # Match issue
@@ -61,16 +63,79 @@ defmodule Link do
 
       # Assemble into the compact form:
       "#{org}/#{project}##{issue_number}"
-
     else
       # Orgs, People or Repos just return the path e.g: "dwyl/app" or "iteles"
       clean
     end
   end
 
-  def remove_protocol(url) do
-    url
-    |> String.replace("https://", "")
-    |> String.replace("http://", "")
+  @doc """
+  `strip_protocol/1` strips the protocol e.g: "https://" from a URL.
+
+  ## Examples
+
+      iex> Link.strip_protocol("https://dwyl.com")
+      "dwyl.com"
+  """
+  def strip_protocol(url) do
+    String.replace(url, ~r"(http(s)?):\/\/", "")
+  end
+
+  @doc """
+  `regex/0` returns the Regular Expression needed to match URLs.
+  According to `RFC 3986`: https://www.rfc-editor.org/rfc/rfc3986
+  Based on reading https://mathiasbynens.be/demo/url-regex
+  After much searching on Google, GitHub and StackOverflow,
+  this is what we came up with.
+
+  #HELPWANTED: if you find a *better* (faster, more comppliant) RegEx
+  that passes all our tests, please share! github.com/dwyl/link/issues/new
+
+  Explanation:
+
+  ((http(s)?):\/\/             # Optional scheme (http or https)
+  (www\.)?                     # Optional "www"
+  a-zA-Z0-9@:%._\+~#=]{2,256}  # Domain (IPv4, IPv6 or hostname)
+  :%                           # Optional port number
+  [a-z]{2,6}\b                 # Domain extension e.g: ".com"
+  (?:\?[^\n\r]*)?              # Optional query string ?q=
+  (?:#[^\n\r]*)?               # Optional fragment e.g: #comment
+
+  ## Examples
+
+    iex> Regex.run(Link.regex(), "dwyl.com") |> List.flatten |> Enum.filter(& &1 != "") |> List.first
+    "dwyl.com"
+  """
+  def regex do
+    ~r|[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,14}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|
+  end
+
+  @doc """
+  `valid?/1` confirms if a URL is valid
+  using the `RFC 3986` compliant `regex/0` above.
+
+  ## Examples
+
+    iex> Link.valid?("example.c")
+    false
+
+    iex> Link.valid?("https://www.example.com")
+    true
+  """
+  def valid?(url) do
+    Regex.match?(regex(), url)
+  end
+
+  @doc """
+  `find/1` finds all instances of a URL in a block of text.
+
+  ## Examples
+
+    iex> Link.find("Text with links http://goo.gl/3co4ae and https://git.io/top & www.dwyl.com etc.")
+    ["http://goo.gl/3co4ae", "https://git.io/top", "www.dwyl.com"]
+  """
+  def find(text) do
+    Regex.scan(regex(), text)
+    |> Enum.map(&hd/1)
   end
 end
