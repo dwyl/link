@@ -1,0 +1,11 @@
+URL, Valid?
+example, false
+http://example, false
+https://www.example.com, true
+example.reallylongtld, true
+https://example.com, true
+https://ww.example.com, true
+https://www.example.com, true
+https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420, true
+http://userid@example.com/, true
+https://www.rfc-editor.org/rfc/rfc3986, true
