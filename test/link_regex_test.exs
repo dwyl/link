@@ -49,8 +49,20 @@ defmodule LinkRegexTest do
            ]
   end
 
-  # test "Link.compact_github_url/1 distils a repo deep link down to the minimum" do
-  #   url = "https://github.com/dwyl/app#what"
-  #   assert Link.compact(url) == "dwyl/app"
-  # end
+  test "Link.find_replace_compact/1 replaces long urls with compact Markdown links" do
+    multi = """
+    This string has multiple https://mvp.fly.dev/ links.
+    Long links https://github.com/nelsonic/nelsonic.github.io/issues/733 and
+    comments: https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420
+    also get extracted.
+    """
+
+    expected = """
+    This string has multiple ![mvp.fly.dev](https://mvp.fly.dev/) links.
+    Long links ![nelsonic/nelsonic.github.io#733](https://github.com/nelsonic/nelsonic.github.io/issues/733) and
+    comments: ![dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420)\nalso get extracted.
+    """
+
+    assert Link.find_replace_compact(multi) == expected
+  end
 end
