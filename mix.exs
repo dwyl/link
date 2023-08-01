@@ -39,19 +39,22 @@ defmodule Link.MixProject do
   defp deps do
     [
       # Keep Code Tidy: https://github.com/rrrene/credo
-        {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.0", only: [:dev, :test], runtime: false},
 
-        # track test coverage: https://github.com/parroty/excoveralls
-        {:excoveralls, "~> 0.16.0", only: [:test, :dev]},
+      # track test coverage: https://github.com/parroty/excoveralls
+      {:excoveralls, "~> 0.16.0", only: [:test, :dev]},
 
-        # Create Documentation Hex.docs: https://hex.pm/packages/ex_doc
-        {:ex_doc, "~> 0.29.0", only: :dev},
+      # Create Documentation Hex.docs: https://hex.pm/packages/ex_doc
+      {:ex_doc, "~> 0.29.0", only: :dev},
 
-        # Git pre-commit hook: https://github.com/dwyl/elixir-pre-commit
-        {:pre_commit, "~> 0.3.4", only: :dev},
+      # Git pre-commit hook: https://github.com/dwyl/elixir-pre-commit
+      {:pre_commit, "~> 0.3.4", only: :dev},
 
-        # Plug helper functions: github.com/elixir-plug/plug
-        {:plug, "~> 1.10", only: [:dev, :test]}
+      # Plug helper functions: github.com/elixir-plug/plug
+      {:plug, "~> 1.10", only: [:dev, :test]},
+
+      # Parse the sample_urls.csv file: github.com/dashbitco/nimble_csv
+      {:nimble_csv, "~> 1.1", only: [:test, :dev]}
     ]
   end
 
