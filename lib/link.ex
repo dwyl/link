@@ -40,14 +40,14 @@ defmodule Link do
 
   ## Examples
 
-    iex> Link.compact_github_url("https://github.com/dwyl/mvp/issues/141")
-    "dwyl/mvp#141"
+      iex> Link.compact_github_url("https://github.com/dwyl/mvp/issues/141")
+      "dwyl/mvp#141"
 
-    iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
-    "dwyl/app#275"
+      iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
+      "dwyl/app#275"
 
-    iex> Link.compact_github_url("https://github.com/dwyl/link#123")
-    "dwyl/link"
+      iex> Link.compact_github_url("https://github.com/dwyl/link#123")
+      "dwyl/link"
   """
   def compact_github_url(url) do
     # Remove any hash (#) URL params, remove "https://" and "github.com/"
@@ -78,8 +78,8 @@ defmodule Link do
 
   ## Examples
 
-    iex> Link.strip_protocol("https://dwyl.com")
-    "dwyl.com"
+      iex> Link.strip_protocol("https://dwyl.com")
+      "dwyl.com"
   """
   def strip_protocol(url) do
     String.replace(url, ~r"(http(s)?):\/\/", "")
@@ -90,8 +90,8 @@ defmodule Link do
 
   ## Examples
 
-    iex> Link.strip_trailing_slash("dwyl.com/")
-    "dwyl.com"
+      iex> Link.strip_trailing_slash("dwyl.com/")
+      "dwyl.com"
   """
   def strip_trailing_slash(url) do
     if String.ends_with?(url, "/") && url != "/" do
@@ -125,8 +125,8 @@ defmodule Link do
 
   ## Examples
 
-    iex> Regex.run(Link.regex(), "dwyl.com") |> List.flatten |> Enum.filter(& &1 != "") |> List.first
-    "dwyl.com"
+      iex> Regex.run(Link.regex(), "dwyl.com") |> List.flatten |> Enum.filter(& &1 != "") |> List.first
+      "dwyl.com"
   """
   def regex do
     ~r|[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,14}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|
@@ -138,11 +138,11 @@ defmodule Link do
 
   ## Examples
 
-    iex> Link.valid?("example.c")
-    false
+      iex> Link.valid?("example.c")
+      false
 
-    iex> Link.valid?("https://www.example.com")
-    true
+      iex> Link.valid?("https://www.example.com")
+      true
   """
   def valid?(url) do
     Regex.match?(regex(), url)
@@ -153,8 +153,8 @@ defmodule Link do
 
   ## Examples
 
-    iex> Link.find("Text with links http://goo.gl/3co4ae and https://git.io/top & www.dwyl.com etc.")
-    ["http://goo.gl/3co4ae", "https://git.io/top", "www.dwyl.com"]
+      iex> Link.find("Text with links http://goo.gl/3co4ae and https://git.io/top & www.dwyl.com etc.")
+      ["http://goo.gl/3co4ae", "https://git.io/top", "www.dwyl.com"]
   """
   def find(text) do
     Regex.scan(regex(), text)
@@ -174,14 +174,14 @@ defmodule Link do
 
   ## Examples
 
-    iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
-    iex> Link.find_replace_compact(md)
-    "# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/)"
+      iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
+      iex> Link.find_replace_compact(md)
+      "# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/)"
 
-    # Does not attempt to compact an existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)
-    iex> md = "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
-    iex> Link.find_replace_compact(md)
-    "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
+      # Does not attempt to compact an existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)
+      iex> md = "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
+      iex> Link.find_replace_compact(md)
+      "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
   """
   def find_replace_compact(text) do
     links = find(text)
