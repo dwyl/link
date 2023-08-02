@@ -165,22 +165,52 @@ defmodule Link do
   `find_replace_compact/1` finds all instances of a URL in a block of text
   and replaces them with the `compact/1` version.
 
+  Only compact the links that aren't surrounded by brackets "()"
+  i.e: "This is our MVP: https://mvp.fly.dev/ please try it!"
+  Becomes "This is our MVP: [mvp.fly.dev](https://mvp.fly.dev/) please try it!"
+  But if the text *already* has a Markdown link or an image, don't compact the URL!
+  e.g: "Please try our App: [app.dwyl.com](https://app.dwyl.com/) feedback welcome!"
+  No change required because it's *already* hyperlinked.
+
   ## Examples
 
     iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
     iex> Link.find_replace_compact(md)
-    "# Hello World! ![dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and ![mvp.fly.dev](https://mvp.fly.dev/)"
+    "# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/)"
+
+    # Does not attempt to compact an existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)
+    iex> md = "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
+    iex> Link.find_replace_compact(md)
+    "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
   """
   def find_replace_compact(text) do
-    map = find(text)
+    links = find(text)
+    # IO.inspect(text)
+
+    map = links
     |> Enum.chunk_every(1)
-    |> Enum.map(fn [i] -> {i, compact(i)} end)
+    |> Enum.map(fn [i] ->
+      # IO.inspect(i)
+      # Find the Link's position in the original text:
+      {a, b} = :binary.match(text, i)
+      # IO.inspect("#{i}: #{a}, #{b}")
+      # Check if URL in Markdown is surrounded by brackets:
+      # IO.inspect(String.at(text, a))
+      if String.at(text, a) != "(" and String.at(text, b) != ")" do
+        {i, compact(i)}
+      else
+        # if you can refactor this be my guest!
+        {nil, nil}
+      end
+    end)
     |> Map.new
+    |> Enum.filter(fn {_, v} -> v != nil end)
+    |> Enum.into(%{})
 
     map
     |> Map.keys()
     |> Enum.reduce(text, fn link, str ->
-      md_link = "![#{map[link]}](#{link})"
+      md_link = "[#{map[link]}](#{link})"
       String.replace(str, link, md_link)
     end)
   end

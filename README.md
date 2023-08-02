@@ -77,7 +77,7 @@ in your `mix.exs` file:
 ```elixir
 def deps do
   [
-    {:link, "~> 1.0.2"}
+    {:link, "~> 1.0.3"}
   ]
 end
 ```
@@ -112,6 +112,12 @@ Link.valid?("example")
 > false
 Link.valid?("https://example.com")
 > true
+
+# Find all instances of a URL in a block of text
+# and replaces them with the "compact" version.
+md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
+Link.find_replace_compact(md)
+"# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/)"
 ```
 
 
