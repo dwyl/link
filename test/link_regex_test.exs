@@ -16,13 +16,15 @@ defmodule LinkRegexTest do
 
   def csv_lines do
     "test/sample_urls.csv"
-    |> File.read!
+    |> File.read!()
     |> CSV.parse_string()
+
     # |> dbg()
   end
 
   test "Link.valid?/1 Test many URLs in sample_urls.csv" do
-    csv_lines() |> Enum.each(fn x ->
+    csv_lines()
+    |> Enum.each(fn x ->
       # e.g: https://www.example.com, true
       assert Link.valid?(List.first(x)) == bool!(List.last(x))
       # IO.inspect("#{List.first(x)}, #{List.last(x)}, #{to_string(Link.valid?(List.first(x)))}")
@@ -31,6 +33,12 @@ defmodule LinkRegexTest do
 
   test "Link.find/1 returns all links in a block of text" do
     text = "text has.com links http://www.links.net in it"
+    assert Link.find(text) == ["has.com", "http://www.links.net"]
+  end
+
+  # Ref: github.com/dwyl/link/issues/6
+  test "Link.find/1 should avoid strings with 3 or more dots e.g: ...something" do
+    text = "text has.com links http://www.links.net in it ...something"
     assert Link.find(text) == ["has.com", "http://www.links.net"]
   end
 
@@ -68,6 +76,7 @@ defmodule LinkRegexTest do
     ![gif](https://media.giphy.com/media/V2qjQASrLwLuwpagjI/giphy.gif)
     are left alone.
     """
+
     # Link.find_replace_compact(multi) |> dbg()
     assert Link.find_replace_compact(multi) == expected
   end

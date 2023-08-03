@@ -57,19 +57,30 @@ defmodule Link do
       |> strip_protocol()
       |> String.replace("github.com/", "")
 
-    # Match issue
-    if String.contains?(url, "/issues/") do
+    cond do
       # "dwyl/mvp/issues/141"
-      parts = String.split(clean, "/")
-      org = Enum.at(parts, 0)
-      project = Enum.at(parts, 1)
-      issue_number = Enum.at(parts, 3)
+      String.contains?(url, "/issues/") ->
+        parts = String.split(clean, "/")
+        org = Enum.at(parts, 0)
+        project = Enum.at(parts, 1)
+        issue_number = Enum.at(parts, 3)
 
-      # Assemble into the compact form:
-      "#{org}/#{project}##{issue_number}"
-    else
-      # Orgs, People or Repos just return the path e.g: "dwyl/app" or "iteles"
-      clean
+        # Assemble into the compact form:
+        "#{org}/#{project}##{issue_number}"
+
+      # dwyl/link/pull/5
+      String.contains?(url, "/pull/") ->
+        parts = String.split(clean, "/")
+        org = Enum.at(parts, 0)
+        project = Enum.at(parts, 1)
+        pr_number = Enum.at(parts, 3)
+
+        # Assemble into the compact form:
+        "#{org}/#{project}/PR##{pr_number}"
+
+      true ->
+        # Orgs, People or Repos just return the path e.g: "dwyl/app" or "iteles"
+        clean
     end
   end
 
@@ -100,8 +111,6 @@ defmodule Link do
       url
     end
   end
-
-
 
   @doc """
   `regex/0` returns the Regular Expression needed to match URLs.
@@ -159,6 +168,9 @@ defmodule Link do
   def find(text) do
     Regex.scan(regex(), text)
     |> Enum.map(&hd/1)
+    # Reject URL with 2 dots i.e. JS spread operator `...numbers`
+    # Ref: github.com/dwyl/link/issues/6
+    |> Enum.reject(&String.contains?(&1, "..."))
   end
 
   @doc """
@@ -187,25 +199,26 @@ defmodule Link do
     links = find(text)
     # IO.inspect(text)
 
-    map = links
-    |> Enum.chunk_every(1)
-    |> Enum.map(fn [i] ->
-      # IO.inspect(i)
-      # Find the Link's position in the original text:
-      {a, b} = :binary.match(text, i)
-      # IO.inspect("#{i}: #{a}, #{b}")
-      # Check if URL in Markdown is surrounded by brackets:
-      # IO.inspect(String.at(text, a))
-      if String.at(text, a) != "(" and String.at(text, b) != ")" do
-        {i, compact(i)}
-      else
-        # if you can refactor this be my guest!
-        {nil, nil}
-      end
-    end)
-    |> Map.new
-    |> Enum.filter(fn {_, v} -> v != nil end)
-    |> Enum.into(%{})
+    map =
+      links
+      |> Enum.chunk_every(1)
+      |> Enum.map(fn [i] ->
+        # IO.inspect(i)
+        # Find the Link's position in the original text:
+        {a, b} = :binary.match(text, i)
+        # IO.inspect("#{i}: #{a}, #{b}")
+        # Check if URL in Markdown is surrounded by brackets:
+        # IO.inspect(String.at(text, a))
+        if String.at(text, a) != "(" and String.at(text, b) != ")" do
+          {i, compact(i)}
+        else
+          # if you can refactor this be my guest!
+          {nil, nil}
+        end
+      end)
+      |> Map.new()
+      |> Enum.filter(fn {_, v} -> v != nil end)
+      |> Enum.into(%{})
 
     map
     |> Map.keys()
