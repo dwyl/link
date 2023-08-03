@@ -79,7 +79,7 @@ defmodule Link do
         "#{org}/#{project}/PR##{pr_number}"
 
       true ->
-        # Orgs, People or Repos just return the path e.g: "dwyl/app" or "iteles"
+        # Orgs, People or Repos just return path e.g: "dwyl/app" or "iteles"
         clean
     end
   end
