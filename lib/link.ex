@@ -174,6 +174,8 @@ defmodule Link do
     # Reject URL with 3 dots i.e. JS spread operator `...numbers`
     # Ref: github.com/dwyl/link/issues/6
     |> Enum.reject(&String.contains?(&1, "..."))
+    # Avoid replacing links with lower specificity
+    |> Enum.sort_by(&String.length/1, :desc)
   end
 
   @doc """

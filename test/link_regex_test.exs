@@ -33,13 +33,13 @@ defmodule LinkRegexTest do
 
   test "Link.find/1 returns all links in a block of text" do
     text = "text has.com links http://www.links.net in it"
-    assert Link.find(text) == ["has.com", "http://www.links.net"]
+    assert Link.find(text) == ["http://www.links.net", "has.com"]
   end
 
   # Ref: github.com/dwyl/link/issues/6
   test "Link.find/1 should avoid strings with 3 or more dots e.g: ...something" do
     text = "text has.com links http://www.links.net in it ...something"
-    assert Link.find(text) == ["has.com", "http://www.links.net"]
+    assert Link.find(text) == ["http://www.links.net", "has.com"]
   end
 
   test "Link.find/1 works for a multi-line string:" do
@@ -51,9 +51,9 @@ defmodule LinkRegexTest do
     """
 
     assert Link.find(multi) == [
-             "https://mvp.fly.dev/",
+             "https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420",
              "https://github.com/nelsonic/nelsonic.github.io/issues/733",
-             "https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420"
+             "https://mvp.fly.dev/"
            ]
   end
 
@@ -80,7 +80,6 @@ defmodule LinkRegexTest do
     # Link.find_replace_compact(multi) |> dbg()
     assert Link.find_replace_compact(multi) == expected
   end
-
 
   test "Link.find_replace_compact/1 PR links" do
     pr_md = """
