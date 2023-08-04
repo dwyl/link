@@ -207,13 +207,12 @@ defmodule Link do
       links
       |> Enum.chunk_every(1)
       |> Enum.map(fn [i] ->
-        # IO.inspect(i)
         # Find the Link's position in the original text:
-        {a, b} = :binary.match(text, i)
-        # IO.inspect("#{i}: #{a}, #{b}")
+        # stackoverflow.com/questions/35551072/find-index-of-a-substring
+        {pos, len} = :binary.match(text, i)
+
         # Check if URL in Markdown is surrounded by brackets:
-        # IO.inspect(String.at(text, a))
-        if String.at(text, a) != "(" and String.at(text, b) != ")" do
+        if String.at(text, pos) != "(" and String.at(text, pos + len) != ")" do
           {i, compact(i)}
         else
           # if you can refactor this be my guest!
@@ -227,8 +226,17 @@ defmodule Link do
     map
     |> Map.keys()
     |> Enum.reduce(text, fn link, str ->
-      md_link = "[#{map[link]}](#{link})"
-      String.replace(str, link, md_link)
+      {pos, len} = :binary.match(text, link)
+      # Match *any* whitespace character:
+      # https://elixirforum.com/t/how-to-detect-if-a-given-character-grapheme-is-whitespace/26735/5
+      IO.inspect("#{text} -> #{link} -> #{pos+len} #{String.at(text, pos + len)}")
+      IO.inspect(Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len))
+      if Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len) do
+        md_link = "[#{map[link]}](#{link})"
+        String.replace(str, link, md_link)
+      else
+        str
+      end
     end)
   end
 end

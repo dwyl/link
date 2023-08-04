@@ -83,12 +83,12 @@ defmodule LinkRegexTest do
 
   test "Link.find_replace_compact/1 PR links" do
     pr_md = """
-    My awesome PR link: https://github.com/dwyl/link/pull/4
+    My awesome PR link: https://github.com/dwyl/link/pull/5
     and comment one too: https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764
     """
 
     expected = """
-    My awesome PR link: [dwyl/link/PR#4](https://github.com/dwyl/link/pull/4)
+    My awesome PR link: [dwyl/link/PR#5](https://github.com/dwyl/link/pull/5)
     and comment one too: [dwyl/link/PR#5](https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764)
     """
 
