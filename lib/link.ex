@@ -191,9 +191,9 @@ defmodule Link do
 
   ## Examples
 
-      iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/"
+      iex> md = "# Hello World! https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420 and https://mvp.fly.dev/ "
       iex> Link.find_replace_compact(md)
-      "# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/)"
+      "# Hello World! [dwyl/mvp#141](https://github.com/dwyl/mvp/issues/141#issuecomment-1657954420) and [mvp.fly.dev](https://mvp.fly.dev/) "
 
       # Does not attempt to compact an existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)
       iex> md = "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
@@ -201,40 +201,19 @@ defmodule Link do
       "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
   """
   def find_replace_compact(text) do
-    links = find(text)
-
-    map =
-      links
-      |> Enum.chunk_every(1)
-      |> Enum.map(fn [i] ->
-        # Find the Link's position in the original text:
-        # stackoverflow.com/questions/35551072/find-index-of-a-substring
-        {pos, len} = :binary.match(text, i)
-
-        # Check if URL in Markdown is surrounded by brackets:
-        if String.at(text, pos) != "(" and String.at(text, pos + len) != ")" do
-          {i, compact(i)}
-        else
-          # if you can refactor this be my guest!
-          {nil, nil}
-        end
-      end)
-      |> Map.new()
-      |> Enum.filter(fn {_, v} -> v != nil end)
-      |> Enum.into(%{})
-
-    map
-    |> Map.keys()
+    find(text)
     |> Enum.reduce(text, fn link, str ->
+      # Find the Link's position in the original text:
+      # stackoverflow.com/questions/35551072/find-index-of-a-substring
       {pos, len} = :binary.match(text, link)
-      # Match *any* whitespace character:
-      # https://elixirforum.com/t/how-to-detect-if-a-given-character-grapheme-is-whitespace/26735/5
-      # IO.inspect("#{text} -> #{link} -> #{pos+len} #{String.at(text, pos + len)}")
-      # IO.inspect(Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len))
+      # Only replace links that have whitespace at the end:
       char = String.at(text, pos + len)
-      if char == "\n" || char == "\r" || char == "\s" do
+      # IO.inspect("#{text} -> #{link} -> #{char}")
+      if char == "\n" || char == "\r" || char == "\s" || char == "/" do
 
-        md_link = "[#{map[link]}](#{link})#{char}"
+        # Create markdown link with the whitespace char:
+
+        md_link = "[#{compact(link)}](#{link})#{char}"
         String.replace(str, link <> char, md_link)
       else
         str
