@@ -18,8 +18,6 @@ defmodule LinkRegexTest do
     "test/sample_urls.csv"
     |> File.read!()
     |> CSV.parse_string()
-
-    # |> dbg()
   end
 
   test "Link.valid?/1 Test many URLs in sample_urls.csv" do
