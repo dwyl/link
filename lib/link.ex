@@ -229,11 +229,13 @@ defmodule Link do
       {pos, len} = :binary.match(text, link)
       # Match *any* whitespace character:
       # https://elixirforum.com/t/how-to-detect-if-a-given-character-grapheme-is-whitespace/26735/5
-      IO.inspect("#{text} -> #{link} -> #{pos+len} #{String.at(text, pos + len)}")
-      IO.inspect(Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len))
-      if Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len) do
-        md_link = "[#{map[link]}](#{link})"
-        String.replace(str, link, md_link)
+      # IO.inspect("#{text} -> #{link} -> #{pos+len} #{String.at(text, pos + len)}")
+      # IO.inspect(Regex.match? ~r/[\n\r\s]+/u, String.at(text, pos + len))
+      char = String.at(text, pos + len)
+      if char == "\n" || char == "\r" || char == "\s" do
+
+        md_link = "[#{map[link]}](#{link})#{char}"
+        String.replace(str, link <> char, md_link)
       else
         str
       end
