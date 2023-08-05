@@ -93,4 +93,23 @@ defmodule LinkRegexTest do
     # Link.find_replace_compact(pr_md) |> dbg()
     assert Link.find_replace_compact(pr_md) == expected
   end
+
+  test "Link.find_replace_compact/1 PR link without any other text" do
+    pr_md = """
+
+    https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764
+
+
+    """
+
+    expected = """
+
+    [dwyl/link/PR#5](https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764)
+
+
+    """
+
+    # Link.find_replace_compact(pr_md) |> dbg()
+    assert Link.find_replace_compact(pr_md) == expected
+  end
 end
