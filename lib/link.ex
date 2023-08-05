@@ -210,7 +210,11 @@ defmodule Link do
       iex> "[dwyl/link/PR#5](https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764)"
   """
   def find_replace_compact(text) do
-    find(text <> @spacer)
+    # Spacer added as workaround for #8
+    text = text <> @spacer
+    |> dbg()
+    find(text)
+    |> dbg()
     |> Enum.reduce(text, fn link, str ->
       # Find the Link's position in the original text:
       # stackoverflow.com/questions/35551072/find-index-of-a-substring
