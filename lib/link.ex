@@ -167,6 +167,10 @@ defmodule Link do
 
       iex> Link.find("Text with links http://goo.gl/3co4ae and https://git.io/top & www.dwyl.com etc.")
       ["http://goo.gl/3co4ae", "https://git.io/top", "www.dwyl.com"]
+
+      # Find a link without any other text or whitespace #8
+      iex> Link.find("https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764")
+      ["https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764"]
   """
   def find(text) do
     Regex.scan(regex(), text)
@@ -199,6 +203,9 @@ defmodule Link do
       iex> md = "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
       iex> Link.find_replace_compact(md)
       "existing markdown [link](https://github.com/dwyl/link) or ![image](https://imgur.com/gallery/odNLFdO)"
+
+      iex> Link.find_replace_compact("https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764")
+      iex> "[dwyl/link/PR#5](https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764)"
   """
   def find_replace_compact(text) do
     find(text)
@@ -206,14 +213,14 @@ defmodule Link do
       # Find the Link's position in the original text:
       # stackoverflow.com/questions/35551072/find-index-of-a-substring
       {pos, len} = :binary.match(text, link)
-      # Only replace links that have whitespace at the end:
+      # Get character immediately after the link in the text:
       char = String.at(text, pos + len)
       # IO.inspect("#{text} -> #{link} -> #{char}")
+      # Only replace links that have whitespace or forward slash at the end:
       if char == "\n" || char == "\r" || char == "\s" || char == "/" do
-
-        # Create markdown link with the whitespace char:
-
+        # Create markdown link preserving the whitespace char:
         md_link = "[#{compact(link)}](#{link})#{char}"
+        # Replace instance of link with char in str (text)
         String.replace(str, link <> char, md_link)
       else
         str
