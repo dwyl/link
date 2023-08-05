@@ -183,7 +183,7 @@ defmodule Link do
   end
 
   # Add then remove the spacer to the end of any text #8
-  @spacer " |fin"
+  @spacer " |コナミコマンド"
   @doc """
   `find_replace_compact/1` finds all instances of a URL in a block of text
   and replaces them with the `compact/1` version.
@@ -210,11 +210,10 @@ defmodule Link do
       iex> "[dwyl/link/PR#5](https://github.com/dwyl/link/pull/5#pullrequestreview-1558913764)"
   """
   def find_replace_compact(text) do
-    # Spacer added as workaround for #8
+    # Spacer added to text as workaround for #8
     text = text <> @spacer
-    |> dbg()
+
     find(text)
-    |> dbg()
     |> Enum.reduce(text, fn link, str ->
       # Find the Link's position in the original text:
       # stackoverflow.com/questions/35551072/find-index-of-a-substring
