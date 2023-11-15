@@ -19,6 +19,9 @@ defmodule Link do
       iex> Link.compact("https://mvp.fly.dev/")
       "mvp.fly.dev"
 
+      iex> Link.compact("https://github.com/dwyl/link")
+      "dwyl/link"
+
   """
   def compact(url) do
     # This uses cond instead of "if" because it will expand soon!
@@ -45,6 +48,9 @@ defmodule Link do
 
       iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
       "dwyl/app#275"
+
+      iex> Link.compact_github_url("https://github.com/dwyl/link")
+      "dwyl/link"
 
       iex> Link.compact_github_url("https://github.com/dwyl/link#123")
       "dwyl/link"
@@ -232,5 +238,20 @@ defmodule Link do
       end
       |> String.split(@spacer) |> List.first()
     end)
+    # Strip @spacer from text: link/issues/13
+    |> String.replace(@spacer, "")
+  end
+
+  @doc """
+  `add_target_blank/1` Adds the target="_blank" attribute to links
+  so that links open in a new Tab/Window.
+
+  ## Examples
+
+      iex> Link.add_target_blank(~s(My <a href="https://link.com">Link</a>))
+      ~s(My <a target="_blank" href="https://link.com">Link</a>)
+  """
+  def add_target_blank(text) do
+    String.replace(text, "<a href=", "<a target=\"_blank\" href=")
   end
 end
