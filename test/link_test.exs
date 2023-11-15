@@ -36,4 +36,9 @@ defmodule LinkTest do
     url = "https://github.com/dwyl/app#what"
     assert Link.compact(url) == "dwyl/app"
   end
+
+  test "Link.find_replace_compact/1 does not leave @spacer in" do
+    text = "Buy Bananas"
+    assert Link.find_replace_compact(text) == text
+  end
 end

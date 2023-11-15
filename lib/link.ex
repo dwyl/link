@@ -232,5 +232,7 @@ defmodule Link do
       end
       |> String.split(@spacer) |> List.first()
     end)
+    # Strip @spacer from text: link/issues/13
+    |> String.replace(@spacer, "")
   end
 end
