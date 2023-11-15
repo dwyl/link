@@ -235,4 +235,17 @@ defmodule Link do
     # Strip @spacer from text: link/issues/13
     |> String.replace(@spacer, "")
   end
+
+  @doc """
+  `add_target_blank/1` Adds the target="_blank" attribute to links
+  so that links open in a new Tab/Window.
+
+  ## Examples
+
+      iex> Link.add_target_blank(~s(My <a href="https://link.com">Link</a>))
+      ~s(My <a target="_blank" href="https://link.com">Link</a>)
+  """
+  def add_target_blank(text) do
+    String.replace(text, "<a href=", "<a target=\"_blank\" href=")
+  end
 end
