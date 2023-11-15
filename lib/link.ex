@@ -19,6 +19,9 @@ defmodule Link do
       iex> Link.compact("https://mvp.fly.dev/")
       "mvp.fly.dev"
 
+      iex> Link.compact("https://github.com/dwyl/link")
+      "dwyl/link"
+
   """
   def compact(url) do
     # This uses cond instead of "if" because it will expand soon!
