@@ -46,6 +46,9 @@ defmodule Link do
       iex> Link.compact_github_url("https://github.com/dwyl/app/issues/275#issuecomment-1646862277")
       "dwyl/app#275"
 
+      iex> Link.compact_github_url("https://github.com/dwyl/link")
+      "dwyl/link"
+
       iex> Link.compact_github_url("https://github.com/dwyl/link#123")
       "dwyl/link"
 
