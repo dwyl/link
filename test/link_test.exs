@@ -29,6 +29,14 @@ defmodule LinkTest do
     assert Link.compact(url) == "git.io/top"
   end
 
+  test "Link.get_base_url/1 returns the https://dwyl.com base url" do
+    url = "https://git.io/top"
+    assert Link.get_base_url(url) == "https://git.io"
+
+    url = "https://dwyl.com/pink-fluffy-unicorns"
+    assert Link.get_base_url(url) == "https://dwyl.com"
+  end
+
   test "Link.strip_protocol/1 returns url without https:// or http://" do
     url = "https://git.io/top"
     assert Link.strip_protocol(url) == "git.io/top"

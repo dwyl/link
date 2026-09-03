@@ -94,6 +94,24 @@ defmodule Link do
   end
 
   @doc """
+  `get_base_url/1` returns the base URL for a given long URL.
+
+  ## Examples
+
+      iex> Link.get_base_url("https://dwyl.com/my-awesome-link")
+      "https://dwyl.com"
+  """
+  def get_base_url(url) do
+    base = url
+    |> strip_protocol()
+    |> String.split("/")
+    |> List.first
+
+    "https://#{base}"
+  end
+
+
+  @doc """
   `strip_protocol/1` strips the protocol e.g: "https://" from a URL.
 
   ## Examples
