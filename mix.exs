@@ -11,13 +11,18 @@ defmodule Link.MixProject do
       deps: deps(),
       package: package(),
       aliases: aliases(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
-        c: :test,
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.json": :test,
-        "coveralls.html": :test
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
+      c: :test,
+      coveralls: :test,
+      "coveralls.detail": :test,
+      "coveralls.json": :test,
+      "coveralls.html": :test
       ]
     ]
   end
