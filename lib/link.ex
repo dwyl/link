@@ -102,14 +102,14 @@ defmodule Link do
       "https://dwyl.com"
   """
   def get_base_url(url) do
-    base = url
-    |> strip_protocol()
-    |> String.split("/")
-    |> List.first
+    base =
+      url
+      |> strip_protocol()
+      |> String.split("/")
+      |> List.first()
 
     "https://#{base}"
   end
-
 
   @doc """
   `strip_protocol/1` strips the protocol e.g: "https://" from a URL.
@@ -254,7 +254,8 @@ defmodule Link do
       else
         str
       end
-      |> String.split(@spacer) |> List.first()
+      |> String.split(@spacer)
+      |> List.first()
     end)
     # Strip @spacer from text: link/issues/13
     |> String.replace(@spacer, "")

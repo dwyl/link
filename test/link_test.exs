@@ -62,13 +62,16 @@ defmodule LinkTest do
 
   test "Link.add_target_blank/1 replaces <a href= with <a target=\"_blank\" href=" do
     text = "<p>\nTarget _blank links: <a href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
+
     assert Link.add_target_blank(text) ==
-      "<p>\nTarget _blank links: <a target=\"_blank\" href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
+             "<p>\nTarget _blank links: <a target=\"_blank\" href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
   end
 
   test "Link.add_target_blank/1 replaces multiple URLs" do
-    text = "<p>My awesome <a href=\"https://link.com\">Link</a> <a href=\"https://foo.bar\">Foo</a></p>"
+    text =
+      "<p>My awesome <a href=\"https://link.com\">Link</a> <a href=\"https://foo.bar\">Foo</a></p>"
+
     assert Link.add_target_blank(text) ==
-      "<p>My awesome <a target=\"_blank\" href=\"https://link.com\">Link</a> <a target=\"_blank\" href=\"https://foo.bar\">Foo</a></p>"
+             "<p>My awesome <a target=\"_blank\" href=\"https://link.com\">Link</a> <a target=\"_blank\" href=\"https://foo.bar\">Foo</a></p>"
   end
 end

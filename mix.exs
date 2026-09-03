@@ -18,11 +18,11 @@ defmodule Link.MixProject do
   def cli do
     [
       preferred_envs: [
-      c: :test,
-      coveralls: :test,
-      "coveralls.detail": :test,
-      "coveralls.json": :test,
-      "coveralls.html": :test
+        c: :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.json": :test,
+        "coveralls.html": :test
       ]
     ]
   end
