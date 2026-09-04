@@ -29,6 +29,14 @@ defmodule LinkTest do
     assert Link.compact(url) == "git.io/top"
   end
 
+  test "Link.get_base_url/1 returns the https://dwyl.com base url" do
+    url = "https://git.io/top"
+    assert Link.get_base_url(url) == "https://git.io"
+
+    url = "https://dwyl.com/pink-fluffy-unicorns"
+    assert Link.get_base_url(url) == "https://dwyl.com"
+  end
+
   test "Link.strip_protocol/1 returns url without https:// or http://" do
     url = "https://git.io/top"
     assert Link.strip_protocol(url) == "git.io/top"
@@ -54,13 +62,16 @@ defmodule LinkTest do
 
   test "Link.add_target_blank/1 replaces <a href= with <a target=\"_blank\" href=" do
     text = "<p>\nTarget _blank links: <a href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
+
     assert Link.add_target_blank(text) ==
-      "<p>\nTarget _blank links: <a target=\"_blank\" href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
+             "<p>\nTarget _blank links: <a target=\"_blank\" href=\"https://amemo.fly.dev/\">amemo.fly.dev</a></p>\n"
   end
 
   test "Link.add_target_blank/1 replaces multiple URLs" do
-    text = "<p>My awesome <a href=\"https://link.com\">Link</a> <a href=\"https://foo.bar\">Foo</a></p>"
+    text =
+      "<p>My awesome <a href=\"https://link.com\">Link</a> <a href=\"https://foo.bar\">Foo</a></p>"
+
     assert Link.add_target_blank(text) ==
-      "<p>My awesome <a target=\"_blank\" href=\"https://link.com\">Link</a> <a target=\"_blank\" href=\"https://foo.bar\">Foo</a></p>"
+             "<p>My awesome <a target=\"_blank\" href=\"https://link.com\">Link</a> <a target=\"_blank\" href=\"https://foo.bar\">Foo</a></p>"
   end
 end

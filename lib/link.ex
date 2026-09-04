@@ -94,6 +94,24 @@ defmodule Link do
   end
 
   @doc """
+  `get_base_url/1` returns the base URL for a given long URL.
+
+  ## Examples
+
+      iex> Link.get_base_url("https://dwyl.com/my-awesome-link")
+      "https://dwyl.com"
+  """
+  def get_base_url(url) do
+    base =
+      url
+      |> strip_protocol()
+      |> String.split("/")
+      |> List.first()
+
+    "https://#{base}"
+  end
+
+  @doc """
   `strip_protocol/1` strips the protocol e.g: "https://" from a URL.
 
   ## Examples
@@ -115,7 +133,7 @@ defmodule Link do
   """
   def strip_trailing_slash(url) do
     if String.ends_with?(url, "/") && url != "/" do
-      String.slice(url, 0..-2)
+      String.slice(url, 0..-2//1)
     else
       url
     end
@@ -236,7 +254,8 @@ defmodule Link do
       else
         str
       end
-      |> String.split(@spacer) |> List.first()
+      |> String.split(@spacer)
+      |> List.first()
     end)
     # Strip @spacer from text: link/issues/13
     |> String.replace(@spacer, "")

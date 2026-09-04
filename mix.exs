@@ -5,14 +5,19 @@ defmodule Link.MixProject do
     [
       app: :link,
       description: "Link parsing, compacting and shortening functions to keep URLs brief.",
-      version: "1.0.11",
+      version: "1.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
       aliases: aliases(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         c: :test,
         coveralls: :test,
         "coveralls.detail": :test,
