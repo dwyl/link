@@ -133,7 +133,7 @@ defmodule Link do
   """
   def strip_trailing_slash(url) do
     if String.ends_with?(url, "/") && url != "/" do
-      String.slice(url, 0..-2)
+      String.slice(url, 0..-2//1)
     else
       url
     end
