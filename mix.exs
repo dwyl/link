@@ -5,7 +5,7 @@ defmodule Link.MixProject do
     [
       app: :link,
       description: "Link parsing, compacting and shortening functions to keep URLs brief.",
-      version: "1.0.11",
+      version: "1.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -53,7 +53,7 @@ defmodule Link.MixProject do
       {:ex_doc, "~> 0.40.0", only: :dev},
 
       # Git pre-commit hook: https://github.com/dwyl/elixir-pre-commit
-      {:pre_commit, "~> 0.3.4", only: :dev},
+      # {:pre_commit, "~> 0.3.4", only: :dev},
 
       # Plug helper functions: github.com/elixir-plug/plug
       {:plug, "~> 1.10", only: [:dev, :test]},
